@@ -295,4 +295,49 @@ button:active {
 
 .bg-white.rounded-lg.shadow-lg {
   animation: fadeIn 0.5s ease-out;
+}
+
+/* Sticky header for controls */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+  background: #fff;
+}
+
+/* Horizontal scroll for categories on mobile */
+@media (max-width: 639px) {
+  .category-dropzone {
+    min-width: 220px;
+    max-width: 90vw;
+  }
+  .flex-row.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Touch-friendly tweaks */
+.number-card, .category-dropzone, button {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Compact padding for mobile */
+@media (max-width: 639px) {
+  .p-6, .p-4 {
+    padding: 0.75rem !important;
+  }
+  .mb-6, .mb-4 {
+    margin-bottom: 0.75rem !important;
+  }
+}
+
+/* Strong border for selected number card */
+.number-card.ring-blue-500 {
+  border: 3px solid #2563eb !important; /* Tailwind blue-600 */
+  box-shadow: 0 0 0 2px #93c5fd; /* Tailwind blue-300 */
+  background: #eff6ff !important; /* Tailwind blue-50 */
+  z-index: 2;
 } 

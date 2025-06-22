@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Question, Category, GameState, LeaderboardEntry } from './types';
+import { GameState, LeaderboardEntry } from './types';
 import { questions } from './data/questions';
 import { categories } from './data/categories';
 import { saveToLeaderboard, getLeaderboard } from './utils/leaderboard';
@@ -294,74 +294,77 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <div className="flex-1 p-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-xl font-bold">{playerName}</div>
-              <div className="flex items-center space-x-4">
-                <div className="text-xl font-bold">Time: {formatTime(timeElapsed)}</div>
-                <div className="text-xl font-bold">Score: {score}</div>
-                <div className="text-xl font-bold">Classified: {getTotalClassifiedNumbers()}/20</div>
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <button
-                onClick={handleSubmit}
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+      {/* Sticky top controls */}
+      <div className="sticky top-0 z-20 bg-white shadow-md px-2 py-2 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-6 border-b">
+        <div className="text-lg font-bold">{playerName}</div>
+        <div className="flex flex-wrap items-center gap-3 justify-center">
+          <div className="text-base font-semibold">⏱ <span aria-label='Elapsed Time'>{formatTime(timeElapsed)}</span></div>
+          <div className="text-base font-semibold">⭐ <span aria-label='Score'>{score}</span></div>
+          <div className="text-base font-semibold">✅ <span aria-label='Classified Numbers'>{getTotalClassifiedNumbers()}/20</span></div>
+        </div>
+        <button
+          onClick={handleSubmit}
+          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 active:scale-95 transition text-base font-bold w-full sm:w-auto"
+          aria-label="Submit Answers"
+        >
+          Submit
+        </button>
+      </div>
+
+      <div className="flex-1 p-2 sm:p-4 max-w-3xl mx-auto w-full flex flex-col gap-4">
+        {/* Numbers Board */}
+        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6 mb-2">
+          <h2 className="text-lg sm:text-xl font-bold mb-2 text-center">Numbers</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            {availableNumbers.map((number) => (
+              <div
+                key={number}
+                onClick={() => handleNumberClick(number)}
+                className={`number-card p-4 text-center text-lg sm:text-xl font-bold cursor-pointer select-none transition ring-2 ${selectedNumber === number ? 'ring-blue-500 bg-blue-50 scale-105' : 'ring-transparent bg-white'} hover:ring-blue-400 active:scale-95`}
+                aria-label={`Select number ${number}`}
+                tabIndex={0}
+                role="button"
               >
-                Submit
-              </button>
-            </div>
+                {number}
+              </div>
+            ))}
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-bold mb-4 text-center">Numbers</h2>
-              <div className="grid grid-cols-4 gap-4">
-                {availableNumbers.map((number) => (
-                  <div
-                    key={number}
-                    onClick={() => handleNumberClick(number)}
-                    className={`number-card p-4 text-center text-xl font-bold cursor-pointer ${
-                      selectedNumber === number ? 'ring-2 ring-blue-500' : ''
-                    }`}
-                  >
-                    {number}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-bold mb-4 text-center">Categories</h2>
-              <div className="space-y-4">
-                {categories.map((category) => (
-                  <div
-                    key={category.id}
-                    onClick={() => handleCategoryClick(category.id)}
-                    className="category-dropzone p-4"
-                  >
-                    <h3 className="font-bold mb-2">{category.name}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{category.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {categorySelections[category.id]?.map((number) => (
-                        <div
-                          key={number}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCategoryNumberClick(number, category.id);
-                          }}
-                          className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full cursor-pointer hover:bg-blue-200"
-                        >
-                          {number}
-                        </div>
-                      ))}
+        {/* Categories - horizontal scroll on mobile */}
+        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-bold mb-2 text-center">Categories</h2>
+          <div className="flex flex-row gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:gap-6">
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                onClick={() => handleCategoryClick(category.id)}
+                className={`category-dropzone min-w-[220px] sm:min-w-0 flex-shrink-0 p-3 sm:p-4 transition border-2 border-dashed ${selectedNumber !== null ? 'hover:border-blue-500' : ''} ${selectedNumber !== null ? 'cursor-pointer' : 'cursor-default'} bg-gray-50 active:scale-98`}
+                aria-label={`Drop numbers here for ${category.name}`}
+                tabIndex={0}
+                role="button"
+              >
+                <h3 className="font-bold mb-1 text-base sm:text-lg">{category.name}</h3>
+                <p className="text-xs sm:text-sm text-gray-600 mb-2">{category.description}</p>
+                <div className="flex flex-wrap gap-2 min-h-[32px]">
+                  {categorySelections[category.id]?.map((number) => (
+                    <div
+                      key={number}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCategoryNumberClick(number, category.id);
+                      }}
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full cursor-pointer hover:bg-blue-200 text-sm sm:text-base"
+                      aria-label={`Remove number ${number} from ${category.name}`}
+                      tabIndex={0}
+                      role="button"
+                    >
+                      {number}
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

@@ -6,8 +6,6 @@ export const questions: Question[] = [
   { number: '-2 + 5i', correctCategory: 'complex' },
   { number: '1 - 3i', correctCategory: 'complex' },
   { number: '-4 - 2i', correctCategory: 'complex' },
-  { number: '10 + 7i', correctCategory: 'complex' },
-  { number: '2 + i', correctCategory: 'complex' },
   { number: '-1 + 6i', correctCategory: 'complex' },
   { number: '5 - 4i', correctCategory: 'complex' },
 
