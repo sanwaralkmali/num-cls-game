@@ -53,19 +53,6 @@ function App() {
     return shuffled.slice(0, count);
   };
 
-  const startGame = () => {
-    if (!playerName.trim()) return;
-    setGameState('playing');
-    setTimeElapsed(0);
-    setScore(0);
-    setCategorySelections({});
-    setSelectedNumber(null);
-    setGameResults(null);
-    // Get 20 random questions
-    const selectedQuestions = getRandomQuestions(20);
-    setAvailableNumbers(selectedQuestions.map(q => q.number));
-  };
-
   const handleLeaderboardClick = () => {
     setShowLeaderboard(true);
   };
