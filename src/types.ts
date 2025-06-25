@@ -19,7 +19,7 @@ export interface CategoryDropzone {
   description: string;
 }
 
-export type GameState = 'start' | 'playing' | 'results' | 'gameOver';
+export type GameState = 'instructions' | 'start' | 'playing' | 'results' | 'gameOver';
 
 export interface Question {
   number: string;

@@ -201,6 +201,50 @@ function App() {
     );
   }
 
+  if (gameState === 'instructions') {
+    return (
+      <div className="min-h-screen bg-gray-100 flex flex-col">
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full relative">
+            <button
+              onClick={() => setGameState('start')}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
+              aria-label="Close instructions"
+            >
+              ×
+            </button>
+            <h1 className="text-3xl font-bold text-center mb-6">How to Play</h1>
+            <ul className="list-disc list-inside text-gray-700 space-y-3 mb-6 text-base">
+              <li>Enter your name and start the game.</li>
+              <li>You will see 20 numbers. Your task is to classify each number into the correct category (e.g., Rational, Irrational, Integer, etc.).</li>
+              <li>Click a number to select it, then click the category where it belongs.</li>
+              <li>If you make a mistake, you can move numbers between categories.</li>
+              <li>When you finish, click the Submit button to see your results and score.</li>
+              <li>Try to get as many correct as possible and see your name on the leaderboard!</li>
+            </ul>
+            <p className="text-center text-gray-500 mb-6">Good luck and have fun learning!</p>
+            <button
+              onClick={() => {
+                setGameState('playing');
+                setTimeElapsed(0);
+                setScore(0);
+                setCategorySelections({});
+                setSelectedNumber(null);
+                setGameResults(null);
+                const selectedQuestions = getRandomQuestions(20);
+                setAvailableNumbers(selectedQuestions.map(q => q.number));
+              }}
+              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 mt-4"
+            >
+              Start Game
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   if (gameState === 'start') {
     return (
       <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -216,7 +260,7 @@ function App() {
                 className="w-full p-3 border rounded-lg"
               />
               <button
-                onClick={startGame}
+                onClick={() => setGameState('instructions')}
                 disabled={!playerName.trim()}
                 className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
