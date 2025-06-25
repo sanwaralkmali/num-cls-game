@@ -337,7 +337,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen max-h-screen h-screen bg-gray-100 flex flex-col">
       {/* Sticky top controls */}
       <div className="sticky top-0 z-20 bg-white shadow-md px-2 py-2 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-6 border-b">
         <div className="text-lg font-bold">{playerName}</div>
@@ -354,17 +354,16 @@ function App() {
           Submit
         </button>
       </div>
-
-      <div className="flex-1 p-2 sm:p-4 max-w-3xl mx-auto w-full flex flex-col gap-4">
+      <div className="flex-1 flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto w-full p-4 overflow-hidden" style={{maxHeight: 'calc(100vh - 64px)'}}>
         {/* Numbers Board */}
-        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6 mb-2">
-          <h2 className="text-lg sm:text-xl font-bold mb-2 text-center">Numbers</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="lg:w-1/3 bg-white rounded-lg shadow-lg p-4 overflow-y-auto" style={{maxHeight: '100%'}}>
+          <h2 className="text-xl font-bold mb-4 text-center">Numbers</h2>
+          <div className="grid grid-cols-4 gap-3">
             {availableNumbers.map((number) => (
               <div
                 key={number}
                 onClick={() => handleNumberClick(number)}
-                className={`number-card p-4 text-center text-lg sm:text-xl font-bold cursor-pointer select-none transition ring-2 ${selectedNumber === number ? 'ring-blue-500 bg-blue-50 scale-105' : 'ring-transparent bg-white'} hover:ring-blue-400 active:scale-95`}
+                className={`number-card p-3 text-lg font-bold cursor-pointer select-none transition ring-2 ${selectedNumber === number ? 'ring-blue-500 bg-blue-50 scale-105' : 'ring-transparent bg-white'} hover:ring-blue-400 active:scale-95`}
                 aria-label={`Select number ${number}`}
                 tabIndex={0}
                 role="button"
@@ -374,23 +373,23 @@ function App() {
             ))}
           </div>
         </div>
-
-        {/* Categories - horizontal scroll on mobile */}
-        <div className="bg-white rounded-lg shadow-lg p-3 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-bold mb-2 text-center">Categories</h2>
-          <div className="flex flex-row gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:gap-6">
+        {/* Categories */}
+        <div className="lg:w-2/3 bg-white rounded-lg shadow-lg p-4 overflow-y-auto" style={{maxHeight: '100%'}}>
+          <h2 className="text-xl font-bold mb-4 text-center">Categories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {categories.map((category) => (
               <div
                 key={category.id}
                 onClick={() => handleCategoryClick(category.id)}
-                className={`category-dropzone min-w-[220px] sm:min-w-0 flex-shrink-0 p-3 sm:p-4 transition border-2 border-dashed ${selectedNumber !== null ? 'hover:border-blue-500' : ''} ${selectedNumber !== null ? 'cursor-pointer' : 'cursor-default'} bg-gray-50 active:scale-98`}
+                className={`category-dropzone p-3 transition border-2 border-dashed ${selectedNumber !== null ? 'hover:border-blue-500' : ''} ${selectedNumber !== null ? 'cursor-pointer' : 'cursor-default'} bg-gray-50 active:scale-98`}
                 aria-label={`Drop numbers here for ${category.name}`}
                 tabIndex={0}
                 role="button"
+                style={{minHeight: '70px', maxHeight: '120px'}}
               >
-                <h3 className="font-bold mb-1 text-base sm:text-lg">{category.name}</h3>
-                <p className="text-xs sm:text-sm text-gray-600 mb-2">{category.description}</p>
-                <div className="flex flex-wrap gap-2 min-h-[32px]">
+                <h3 className="font-bold text-base mb-1">{category.name}</h3>
+                <p className="text-xs text-gray-600 mb-1">{category.description}</p>
+                <div className="flex flex-wrap gap-2 min-h-[24px]">
                   {categorySelections[category.id]?.map((number) => (
                     <div
                       key={number}
@@ -398,7 +397,7 @@ function App() {
                         e.stopPropagation();
                         handleCategoryNumberClick(number, category.id);
                       }}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full cursor-pointer hover:bg-blue-200 text-sm sm:text-base"
+                      className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full cursor-pointer hover:bg-blue-200 text-xs"
                       aria-label={`Remove number ${number} from ${category.name}`}
                       tabIndex={0}
                       role="button"
